@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "EK_CUSTOMER")
+@Table(name = "CUSTOMER")
 public class Customer {
     @Id
     private String emailId;
