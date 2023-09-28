@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CustomerCredDTO {
-    private String name;
+    private String emailId;
     private String password;
 }
