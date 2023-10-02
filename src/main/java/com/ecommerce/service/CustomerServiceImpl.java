@@ -4,12 +4,14 @@ import com.ecommerce.dto.CustomerDTO;
 import com.ecommerce.entity.Customer;
 import com.ecommerce.exception.ECartException;
 import com.ecommerce.repository.CustomerRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@Transactional
 public class CustomerServiceImpl implements CustomerService{
 
     @Autowired
@@ -60,16 +62,26 @@ public class CustomerServiceImpl implements CustomerService{
         Optional<Customer> optionalCustomer = customerRepository.findById(emailId.toLowerCase());
         Customer customer = optionalCustomer.orElseThrow(()-> new ECartException("CustomerService.CUSTOMER_NOT_FOUND"));
         customer.setAddress(address);
-        customerRepository.save(customer);
     }
 
     @Override
     public void deleteShippingAddress(String emailId) throws ECartException {
-
+        Optional<Customer> optionalCustomer = customerRepository.findById(emailId.toLowerCase());
+        Customer customer = optionalCustomer.orElseThrow(()-> new ECartException("CustomerService.CUSTOMER_NOT_FOUND"));
+        customer.setAddress(null);
     }
 
     @Override
     public CustomerDTO getCustomerByEmailId(String emailId) throws ECartException {
-        return null;
+        Optional<Customer> optionalCustomer = customerRepository.findById(emailId.toLowerCase());
+        Customer customer = optionalCustomer.orElseThrow(()->new ECartException("CustomerService.CUSTOMER_NOT_FOUND"));
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setPhoneNumber(customer.getPhoneNumber());
+        customerDTO.setEmailId(customer.getEmailId());
+        customerDTO.setName(customer.getName());
+        customerDTO.setAddress(customer.getAddress());
+        customerDTO.setPassword(customer.getPassword());
+        customerDTO.setNewPassword(customer.getPassword());
+        return customerDTO;
     }
 }

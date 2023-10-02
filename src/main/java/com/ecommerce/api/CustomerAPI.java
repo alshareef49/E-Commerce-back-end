@@ -43,4 +43,18 @@ public class CustomerAPI {
         return new ResponseEntity<>(message,HttpStatus.OK);
     }
 
+    @DeleteMapping(value = "/customer/{emailId}")
+    public ResponseEntity<String> deleteShippingAddress(@PathVariable String emailId) throws ECartException{
+        log.info("Customer trying to delete shipping address, Email Id:{}",emailId);
+        customerService.deleteShippingAddress(emailId);
+        String message = "Customer successfully deleted shipping address email id:"+emailId;
+        return new ResponseEntity<>(message,HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/customer/{emailId}")
+    public ResponseEntity<CustomerDTO> getCustomerByEmailId(@PathVariable String emailId) throws ECartException{
+        CustomerDTO customerDTO = customerService.getCustomerByEmailId(emailId);
+        return new ResponseEntity<>(customerDTO,HttpStatus.OK);
+    }
+
 }
