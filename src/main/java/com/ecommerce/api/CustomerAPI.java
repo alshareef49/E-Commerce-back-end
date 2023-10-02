@@ -35,4 +35,12 @@ public class CustomerAPI {
         return new ResponseEntity<>(message,HttpStatus.CREATED);
     }
 
+    @PutMapping(value = "/customer/{emailId}/address/")
+    public ResponseEntity<String> updateShippingAddress(@PathVariable String emailId,@RequestBody CustomerDTO customerDTO) throws ECartException{
+        log.info("updating shipping address for Email Id:{}",emailId);
+        customerService.updateShippingAddress(emailId,customerDTO.getAddress());
+        String message = "Successfully updated shipping address for "+emailId;
+        return new ResponseEntity<>(message,HttpStatus.OK);
+    }
+
 }

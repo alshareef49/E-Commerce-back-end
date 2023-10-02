@@ -57,7 +57,10 @@ public class CustomerServiceImpl implements CustomerService{
 
     @Override
     public void updateShippingAddress(String emailId, String address) throws ECartException {
-
+        Optional<Customer> optionalCustomer = customerRepository.findById(emailId.toLowerCase());
+        Customer customer = optionalCustomer.orElseThrow(()-> new ECartException("CustomerService.CUSTOMER_NOT_FOUND"));
+        customer.setAddress(address);
+        customerRepository.save(customer);
     }
 
     @Override
