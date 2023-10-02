@@ -8,10 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @Slf4j
@@ -27,6 +24,15 @@ public class CustomerAPI {
         CustomerDTO customerDTOFromDb = customerService.authenticateCustomer(customerCredDTO.getEmailId(), customerCredDTO.getPassword());
         log.info("Customer login Success, Customer Email Id:{}",customerDTOFromDb.getEmailId());
         return new ResponseEntity<>(customerDTOFromDb, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/register")
+    public ResponseEntity<String> registerCustomer(@RequestBody CustomerDTO customerDTO) throws ECartException{
+        log.info("Customer is Trying to register, Customer Email ID:{}",customerDTO.getEmailId());
+        String registerEmailId = customerService.registerNewCustomer(customerDTO);
+        log.info("Customer Successfully register with Email Id:{}",registerEmailId);
+        String message = "Customer Successfully register with Email Id:"+registerEmailId;
+        return new ResponseEntity<>(message,HttpStatus.CREATED);
     }
 
 }

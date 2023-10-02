@@ -33,7 +33,26 @@ public class CustomerServiceImpl implements CustomerService{
 
     @Override
     public String registerNewCustomer(CustomerDTO customerDTO) throws ECartException {
-        return null;
+        String registerWithEmailId  = null;
+        boolean isEmailNotAvailable = customerRepository.findById(customerDTO.getEmailId().toLowerCase()).isEmpty();
+        boolean isPhoneNumberNotAvailable = customerRepository.findByPhoneNumber(customerDTO.getPhoneNumber()).isEmpty();
+        if(isEmailNotAvailable){
+            if(isPhoneNumberNotAvailable){
+                Customer customer = new Customer();
+                customer.setAddress(customerDTO.getAddress());
+                customer.setName(customerDTO.getName());
+                customer.setPassword(customerDTO.getPassword());
+                customer.setEmailId(customerDTO.getEmailId());
+                customer.setPhoneNumber(customerDTO.getPhoneNumber());
+                customerRepository.save(customer);
+                registerWithEmailId = customer.getEmailId();
+            }else {
+                throw new ECartException("CustomerService.PHONE_NUMBER_ALREADY_IN_USE");
+            }
+        }else {
+            throw new ECartException("CustomerService.EMAIL_ID_ALREADY_IN_USE");
+        }
+        return registerWithEmailId;
     }
 
     @Override
